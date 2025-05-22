@@ -1,0 +1,117 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img src="<%= user.profile_image || '/images/default-profile.png' %>" 
+                         alt="Profil Resmi" 
+                         class="profile-image mb-3"
+                         id="profile-image-preview">
+                    
+                    <form action="/profile/upload-image" method="POST" enctype="multipart/form-data" class="mb-3">
+                        <div class="mb-3">
+                            <label for="profile_image" class="form-label">Profil Resmi Yükle</label>
+                            <input type="file" 
+                                   class="form-control" 
+                                   id="profile_image" 
+                                   name="profile_image" 
+                                   accept="image/*"
+                                   onchange="previewProfileImage(this)">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Resmi Güncelle</button>
+                    </form>
+
+                    <h4><%= user.name %> <%= user.surname %></h4>
+                    <p class="text-muted"><%= user.role === 'student' ? 'Öğrenci' : user.role === 'graduate' ? 'Mezun' : 'Akademisyen' %></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Profil Bilgileri</h4>
+                </div>
+                <div class="card-body">
+                    <% if (success_msg != '') { %>
+                        <div class="alert alert-success"><%= success_msg %></div>
+                    <% } %>
+                    
+                    <% if (error_msg != '') { %>
+                        <div class="alert alert-danger"><%= error_msg %></div>
+                    <% } %>
+
+                    <form action="/profile/update" method="POST" id="profileForm" onsubmit="return validateForm('profileForm')">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Ad</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="name" 
+                                   name="name" 
+                                   value="<%= user.name %>" 
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="surname" class="form-label">Soyad</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="surname" 
+                                   name="surname" 
+                                   value="<%= user.surname %>" 
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-posta</label>
+                            <input type="email" 
+                                   class="form-control" 
+                                   id="email" 
+                                   name="email" 
+                                   value="<%= user.email %>" 
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Rol</label>
+                            <select class="form-control" id="role" name="role" required>
+                                <option value="student" <%= user.role === 'student' ? 'selected' : '' %>>Öğrenci</option>
+                                <option value="graduate" <%= user.role === 'graduate' ? 'selected' : '' %>>Mezun</option>
+                                <option value="academic" <%= user.role === 'academic' ? 'selected' : '' %>>Akademisyen</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h4>Katıldığım Etkinlikler</h4>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <% if (typeof events != 'undefined' && events.length > 0) { %>
+                            <% events.forEach(function(event) { %>
+                                <a href="/events/<%= event.id %>" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><%= event.title %></h5>
+                                        <small><%= new Date(event.date).toLocaleDateString('tr-TR') %></small>
+                                    </div>
+                                    <p class="mb-1"><%= event.location %></p>
+                                </a>
+                            <% }); %>
+                        <% } else { %>
+                            <p class="text-muted">Henüz hiç etkinliğe katılmadınız.</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

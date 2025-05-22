@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Katıldığım Eğitimler</h2>
+
+    <% if (trainings && trainings.length > 0) { %>
+        <div class="row">
+            <% trainings.forEach(training => { %>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= training.title %></h5>
+                            <p class="card-text"><%= training.description %></p>
+                            <div class="mt-3">
+                                <p class="mb-1"><strong>Başlangıç Tarihi:</strong> <%= new Date(training.start_date).toLocaleDateString('tr-TR') %></p>
+                                <p class="mb-1"><strong>Süre:</strong> <%= training.duration %> saat</p>
+                                <p class="mb-1"><strong>Eğitmen:</strong> <%= training.instructor %></p>
+                            </div>
+                            <a href="/trainings/<%= training.id %>" class="btn btn-primary mt-3">Detayları Gör</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <div class="alert alert-info">
+            Henüz hiçbir eğitime katılmadınız. <a href="/trainings">Eğitimleri görüntülemek için tıklayın</a>.
+        </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %> 

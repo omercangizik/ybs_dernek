@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Mesajlarım</h2>
+
+                    <% if (messages && messages.length > 0) { %>
+                        <% messages.forEach(message => { %>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= message.subject %></h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        <%= new Date(message.created_at).toLocaleDateString('tr-TR') %>
+                                    </h6>
+                                    <p class="card-text"><%= message.message %></p>
+                                    <div class="text-muted">
+                                        <small>
+                                            <strong>Gönderen:</strong> <%= message.name %> (<%= message.email %>)
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="alert alert-info">
+                            Henüz hiç mesaj göndermediniz.
+                            <a href="/contact" class="alert-link">İletişim formuna git</a>
+                        </div>
+                    <% } %>
+
+                    <div class="mt-4">
+                        <a href="/contact" class="btn btn-primary">Yeni Mesaj Gönder</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

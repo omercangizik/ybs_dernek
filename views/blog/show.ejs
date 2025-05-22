@@ -1,0 +1,70 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title mb-4"><%= post.title %></h2>
+                    
+                    <div class="mb-4">
+                        <p class="card-text"><%= post.content %></p>
+                    </div>
+
+                    <div class="text-muted mb-4">
+                        <p>
+                            <i class="fas fa-user"></i> <%= post.author_name %> |
+                            <i class="fas fa-calendar"></i> <%= new Date(post.created_at).toLocaleDateString('tr-TR') %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="mb-4">Yorumlar</h4>
+
+                    <% if (typeof user != 'undefined' && user) { %>
+                        <form action="/blog/<%= post.id %>/comment" method="POST" class="mb-4">
+                            <div class="mb-3">
+                                <textarea name="content" class="form-control" rows="3" placeholder="Yorumunuzu yazın..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Yorum Yap</button>
+                        </form>
+                    <% } else { %>
+                        <div class="alert alert-info mb-4">
+                            Yorum yapmak için <a href="/login">giriş yapın</a> veya <a href="/register">kayıt olun</a>.
+                        </div>
+                    <% } %>
+
+                    <% if (comments && comments.length > 0) { %>
+                        <% comments.forEach(comment => { %>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <p class="card-text"><%= comment.content %></p>
+                                    <div class="text-muted">
+                                        <small>
+                                            <i class="fas fa-user"></i> <%= comment.commenter_name %> |
+                                            <i class="fas fa-calendar"></i> <%= new Date(comment.created_at).toLocaleDateString('tr-TR') %>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="alert alert-info">
+                            Henüz yorum yapılmamış. İlk yorumu siz yapın!
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="/blog" class="btn btn-secondary">Bloga Dön</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

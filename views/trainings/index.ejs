@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Eğitimler</h2>
+            
+            <% if (typeof trainings != 'undefined' && trainings.length > 0) { %>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <% trainings.forEach(function(training) { %>
+                        <div class="col">
+                            <div class="card h-100 training-card">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= training.title %></h5>
+                                    <p class="card-text"><%= training.description %></p>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar"></i> <%= new Date(training.start_date).toLocaleDateString('tr-TR') %>
+                                        </small>
+                                    </p>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock"></i> <%= training.duration %> saat
+                                        </small>
+                                    </p>
+                                </div>
+                                <div class="card-footer bg-transparent border-top-0">
+                                    <a href="/trainings/<%= training.id %>" class="btn btn-primary">Detaylar</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info">
+                    Henüz eğitim bulunmamaktadır.
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

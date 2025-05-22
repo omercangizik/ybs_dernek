@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Etkinlikler</h2>
+            
+            <% if (typeof events != 'undefined' && events.length > 0) { %>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <% events.forEach(function(event) { %>
+                        <div class="col">
+                            <div class="card h-100 event-card">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= event.title %></h5>
+                                    <p class="card-text"><%= event.description %></p>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar"></i> <%= new Date(event.date).toLocaleDateString('tr-TR') %>
+                                        </small>
+                                    </p>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-map-marker-alt"></i> <%= event.location %>
+                                        </small>
+                                    </p>
+                                </div>
+                                <div class="card-footer bg-transparent border-top-0">
+                                    <a href="/events/<%= event.id %>" class="btn btn-primary">Detaylar</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info">
+                    Henüz etkinlik bulunmamaktadır.
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

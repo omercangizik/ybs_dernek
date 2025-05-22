@@ -1,0 +1,50 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Blog</h2>
+            
+            <% if (typeof posts != 'undefined' && posts.length > 0) { %>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <% posts.forEach(function(post) { %>
+                        <div class="col">
+                            <div class="card h-100 blog-card">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= post.title %></h5>
+                                    <p class="card-text"><%= post.content.substring(0, 150) %>...</p>
+                                    <div class="mt-3">
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                <i class="fas fa-user"></i> <%= post.author_name %>
+                                            </small>
+                                        </p>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar"></i> <%= new Date(post.created_at).toLocaleDateString('tr-TR') %>
+                                            </small>
+                                        </p>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                <i class="fas fa-comments"></i> <%= post.comment_count %> yorum
+                                            </small>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent border-top-0">
+                                    <a href="/blog/<%= post.id %>" class="btn btn-primary">Devamını Oku</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info">
+                    Henüz blog yazısı bulunmamaktadır.
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

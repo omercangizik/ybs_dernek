@@ -1,0 +1,31 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Katıldığım Etkinlikler</h2>
+
+    <% if (events && events.length > 0) { %>
+        <div class="row">
+            <% events.forEach(event => { %>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= event.title %></h5>
+                            <p class="card-text"><%= event.description %></p>
+                            <div class="mt-3">
+                                <p class="mb-1"><strong>Tarih:</strong> <%= new Date(event.date).toLocaleDateString('tr-TR') %></p>
+                                <p class="mb-1"><strong>Yer:</strong> <%= event.location %></p>
+                            </div>
+                            <a href="/events/<%= event.id %>" class="btn btn-primary mt-3">Detayları Gör</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <div class="alert alert-info">
+            Henüz hiçbir etkinliğe katılmadınız. <a href="/events">Etkinlikleri görüntülemek için tıklayın</a>.
+        </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %> 

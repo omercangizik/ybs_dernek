@@ -1,0 +1,56 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">İletişim Formu</h2>
+
+                    <form action="/contact" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Ad Soyad</label>
+                            <input type="text" class="form-control" id="name" name="name" required
+                                value="<%= typeof user != 'undefined' && user ? user.name : '' %>">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-posta</label>
+                            <input type="email" class="form-control" id="email" name="email" required
+                                value="<%= typeof user != 'undefined' && user ? user.email : '' %>">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Konu</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Mesaj</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Gönder</button>
+                    </form>
+
+                    <% if (typeof user != 'undefined' && user) { %>
+                        <div class="mt-4">
+                            <a href="/contact/my-messages" class="btn btn-secondary">Mesajlarımı Görüntüle</a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">İletişim Bilgileri</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Adres: [Dernek Adresi]</p>
+                    <p><i class="fas fa-phone"></i> Telefon: [Telefon Numarası]</p>
+                    <p><i class="fas fa-envelope"></i> E-posta: [E-posta Adresi]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

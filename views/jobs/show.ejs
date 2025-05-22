@@ -1,0 +1,56 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4"><%= job.title %></h2>
+                    
+                    <div class="mb-4">
+                        <h5>İş Tanımı</h5>
+                        <p class="card-text"><%= job.description %></p>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>Şirket:</strong> <%= job.company %></p>
+                            <p><strong>Konum:</strong> <%= job.location %></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Çalışma Şekli:</strong> <%= job.employment_type %></p>
+                            <p><strong>Deneyim:</strong> <%= job.experience_level %></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Gereksinimler</h5>
+                        <p class="card-text"><%= job.requirements %></p>
+                    </div>
+
+                    <% if (typeof user != 'undefined' && user) { %>
+                        <% if (!hasApplied) { %>
+                            <form action="/jobs/<%= job.id %>/apply" method="POST">
+                                <button type="submit" class="btn btn-primary">Başvur</button>
+                            </form>
+                        <% } else { %>
+                            <div class="alert alert-success">
+                                Bu iş ilanına başvurdunuz.
+                            </div>
+                        <% } %>
+                    <% } else { %>
+                        <div class="alert alert-info">
+                            Başvuru yapmak için <a href="/login">giriş yapın</a> veya <a href="/register">kayıt olun</a>.
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="/jobs" class="btn btn-secondary">İş İlanlarına Dön</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

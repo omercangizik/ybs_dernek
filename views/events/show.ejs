@@ -1,0 +1,49 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4"><%= event.title %></h2>
+                    
+                    <div class="mb-4">
+                        <h5>Etkinlik Detayları</h5>
+                        <p class="card-text"><%= event.description %></p>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>Tarih:</strong> <%= new Date(event.date).toLocaleDateString('tr-TR') %></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Yer:</strong> <%= event.location %></p>
+                        </div>
+                    </div>
+
+                    <% if (typeof user != 'undefined' && user) { %>
+                        <% if (!isRegistered) { %>
+                            <form action="/events/<%= event.id %>/register" method="POST">
+                                <button type="submit" class="btn btn-primary">Etkinliğe Katıl</button>
+                            </form>
+                        <% } else { %>
+                            <div class="alert alert-success">
+                                Bu etkinliğe kayıtlısınız.
+                            </div>
+                        <% } %>
+                    <% } else { %>
+                        <div class="alert alert-info">
+                            Etkinliğe katılmak için <a href="/login">giriş yapın</a> veya <a href="/register">kayıt olun</a>.
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="/events" class="btn btn-secondary">Etkinliklere Dön</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

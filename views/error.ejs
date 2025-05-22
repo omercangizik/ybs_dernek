@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1 class="display-1 text-danger mb-4">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </h1>
+                    <h2 class="card-title mb-4">Hata Oluştu</h2>
+                    <p class="card-text lead"><%= message %></p>
+                    <% if (error && process.env.NODE_ENV === 'development') { %>
+                        <div class="alert alert-danger mt-4">
+                            <h5>Hata Detayları:</h5>
+                            <pre class="mb-0"><%= error.stack %></pre>
+                        </div>
+                    <% } %>
+                    <div class="mt-4">
+                        <a href="/" class="btn btn-primary">Ana Sayfaya Dön</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %> 
