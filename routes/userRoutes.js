@@ -10,6 +10,11 @@ router.get('/', (req, res) => {
     res.render('index');
 });
 
+// Donation routes
+router.get('/donate', isAuthenticated, userController.getDonate);
+router.post('/donate', isAuthenticated, userController.postDonate);
+router.get('/donate/receipt/:id', isAuthenticated, userController.getDonationReceipt);
+
 // Configure multer for file upload
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

@@ -1,6 +1,9 @@
 const bcrypt = require('bcryptjs');
 const pool = require('../db/mysql_connect');
 const { validationResult } = require('express-validator');
+const PDFDocument = require('pdfkit');
+const path = require('path');
+const fs = require('fs');
 
 // Get register page
 exports.getRegister = (req, res) => {
@@ -171,5 +174,148 @@ exports.uploadProfileImage = async (req, res) => {
         console.error(error);
         req.flash('error_msg', 'Profil resmi yüklenirken bir hata oluştu.');
         res.redirect('/profile');
+    }
+};
+
+// Generate receipt number
+const generateReceiptNumber = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    return `DON-${year}${month}${day}-${random}`;
+};
+
+// Generate PDF receipt
+const generatePDFReceipt = async (donation, user) => {
+    const receiptNumber = generateReceiptNumber();
+    const doc = new PDFDocument({
+        size: 'A4',
+        margins: {
+            top: 50,
+            bottom: 50,
+            left: 50,
+            right: 50
+        }
+    });
+
+    // Add content to PDF
+    doc.fontSize(20)
+       .text('YBS Dernek - Bagis Makbuzu', { align: 'center' });
+    
+    doc.moveDown();
+    
+    doc.fontSize(12)
+       .text(`Makbuz No: ${receiptNumber}`)
+       .text(`Tarih: ${new Date().toLocaleDateString('tr-TR')}`);
+    
+    doc.moveDown();
+    
+    doc.text(`Bagisci: ${user.name} ${user.surname}`)
+       .text(`E-posta: ${user.email}`);
+    
+    doc.moveDown();
+    
+    doc.text(`Bagis Miktari: ${donation.amount} TL`)
+       .text(`Odeme Yontemi: ${donation.paymentMethod === 'credit_card' ? 'Kredi Karti' : 'Banka Havalesi'}`);
+    
+    if (donation.message) {
+        doc.moveDown();
+        doc.text(`Mesaj: ${donation.message}`);
+    }
+    
+    doc.moveDown();
+    doc.text('YBS Dernek adina tesekkur ederiz.', { align: 'center' });
+
+    // Add a border
+    doc.rect(30, 30, 535, 755).stroke();
+
+    return { doc, receiptNumber };
+};
+
+// Donation page
+exports.getDonate = (req, res) => {
+    res.render('user/donate', {
+        title: 'Bağış Yap',
+        user: req.session.user,
+        messages: {
+            error_msg: req.flash('error_msg'),
+            success_msg: req.flash('success_msg')
+        }
+    });
+};
+
+// Process donation
+exports.postDonate = async (req, res) => {
+    try {
+        const { amount, paymentMethod, message } = req.body;
+        const userId = req.session.user.id;
+
+        // Generate PDF receipt
+        const donation = {
+            amount,
+            paymentMethod,
+            message
+        };
+        
+        const { doc, receiptNumber } = await generatePDFReceipt(donation, req.session.user);
+
+        // Save donation to database
+        const [result] = await pool.query(
+            'INSERT INTO donations (user_id, amount, payment_method, message, receipt_number) VALUES (?, ?, ?, ?, ?)',
+            [userId, amount, paymentMethod, message, receiptNumber]
+        );
+
+        // Set headers for PDF download
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=bagis_makbuzu_${receiptNumber}.pdf`);
+
+        // Pipe the PDF directly to the response
+        doc.pipe(res);
+        doc.end();
+
+    } catch (error) {
+        console.error('Donation error:', error);
+        req.flash('error_msg', 'Bağış işlemi sırasında bir hata oluştu.');
+        res.redirect('/donate');
+    }
+};
+
+// Get donation receipt
+exports.getDonationReceipt = async (req, res) => {
+    try {
+        const donationId = req.params.id;
+        const userId = req.session.user.id;
+
+        // Get donation details
+        const [donations] = await pool.query(
+            'SELECT * FROM donations WHERE id = ? AND user_id = ?',
+            [donationId, userId]
+        );
+
+        if (donations.length === 0) {
+            req.flash('error_msg', 'Bağış makbuzu bulunamadı.');
+            return res.redirect('/donate');
+        }
+
+        const donation = donations[0];
+        const user = req.session.user;
+
+        // Generate PDF receipt
+        const { doc } = await generatePDFReceipt(donation, user);
+
+        // Set headers for PDF download
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=bagis_makbuzu_${donation.receipt_number}.pdf`);
+
+        // Pipe the PDF directly to the response
+        doc.pipe(res);
+        doc.end();
+
+    } catch (error) {
+        console.error('Receipt download error:', error);
+        req.flash('error_msg', 'Bağış makbuzu indirilirken bir hata oluştu.');
+        res.redirect('/donate');
     }
 }; 

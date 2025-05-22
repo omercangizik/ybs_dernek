@@ -1,0 +1,48 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Bağış Yap</h3>
+                </div>
+                <div class="card-body">
+                    <% if (messages.error_msg && messages.error_msg.length > 0) { %>
+                        <div class="alert alert-danger"><%= messages.error_msg %></div>
+                    <% } %>
+                    
+                    <% if (messages.success_msg && messages.success_msg.length > 0) { %>
+                        <div class="alert alert-success"><%= messages.success_msg %></div>
+                    <% } %>
+                    
+                    <form action="/donate" method="POST">
+                        <div class="form-group mb-3">
+                            <label for="amount">Bağış Miktarı (TL)</label>
+                            <input type="number" class="form-control" id="amount" name="amount" min="1" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="paymentMethod">Ödeme Yöntemi</label>
+                            <select class="form-control" id="paymentMethod" name="paymentMethod" required>
+                                <option value="credit_card">Kredi Kartı</option>
+                                <option value="bank_transfer">Banka Havalesi</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="message">Mesajınız (İsteğe bağlı)</label>
+                            <textarea class="form-control" id="message" name="message" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Bağış Yap</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 
