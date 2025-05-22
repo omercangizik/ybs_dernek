@@ -9,14 +9,39 @@ main {
     flex: 1;
 }
 
+/* Hero Section */
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 100px 0;
+    position: relative;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 1;
+}
+
 /* Card Styles */
 .card {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Profile Image */
@@ -59,23 +84,48 @@ main {
     margin: 0 auto;
 }
 
+/* Navbar styles */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand img {
+    filter: brightness(0) invert(1);
+}
+
+/* Custom Button Styles */
+.btn {
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-weight: 500;
+}
+
+.btn-lg {
+    padding: 12px 30px;
+}
+
+/* Footer */
+footer {
+    margin-top: 60px;
+    background-color: #f8f9fa;
+    padding: 40px 0;
+    border-top: 1px solid #dee2e6;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
+    .hero-section {
+        padding: 60px 0;
+    }
+    
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    
     .profile-image {
         width: 120px;
         height: 120px;
     }
-}
-
-/* Custom Button Styles */
-.btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-}
-
-.btn-primary:hover {
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
 }
 
 /* Alert Messages */
@@ -90,19 +140,6 @@ main {
     box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
 }
 
-/* Navigation */
-.navbar {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .nav-link {
     font-weight: 500;
-}
-
-/* Footer */
-footer {
-    margin-top: auto;
-    background-color: #f8f9fa;
-    padding: 1rem 0;
-    border-top: 1px solid #dee2e6;
 } 

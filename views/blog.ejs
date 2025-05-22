@@ -1,0 +1,71 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Blog Posts List -->
+        <div class="col-lg-8">
+            <h1 class="mb-4">Blog Yazıları</h1>
+            
+            <% if (typeof posts !== 'undefined' && posts.length > 0) { %>
+                <% posts.forEach(post => { %>
+                    <div class="card mb-4">
+                        <% if (post.image_url) { %>
+                            <img src="<%= post.image_url %>" class="card-img-top" alt="<%= post.title %>" style="height: 300px; object-fit: cover;">
+                        <% } %>
+                        <div class="card-body">
+                            <h2 class="card-title h4"><%= post.title %></h2>
+                            <p class="card-text text-muted">
+                                <small>
+                                    <i class="fas fa-user me-2"></i><%= post.author_name %>
+                                    <i class="fas fa-calendar ms-3 me-2"></i><%= new Date(post.created_at).toLocaleDateString('tr-TR') %>
+                                </small>
+                            </p>
+                            <p class="card-text"><%= post.content.substring(0, 200) %>...</p>
+                            <a href="/blog/<%= post.id %>" class="btn btn-primary">Devamını Oku</a>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="alert alert-info">
+                    Henüz blog yazısı bulunmamaktadır.
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <% if (typeof user !== 'undefined' && user) { %>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title h5">Yeni Blog Yazısı</h3>
+                        <form action="/blog/create" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Başlık</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="content" class="form-label">İçerik</label>
+                                <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Görsel</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Yayınla</button>
+                        </form>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title h5">Blog Yazısı Paylaşmak İster misiniz?</h3>
+                        <p class="card-text">Blog yazısı paylaşmak için giriş yapmanız gerekmektedir.</p>
+                        <a href="/login" class="btn btn-primary">Giriş Yap</a>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %> 

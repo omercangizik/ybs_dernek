@@ -56,6 +56,20 @@ app.use('/jobs', jobRoutes);
 app.use('/blog', blogRoutes);
 app.use('/contact', contactRoutes);
 
+// About page route
+app.get('/about', (req, res) => {
+    res.render('about', {
+        title: 'Hakkımızda'
+    });
+});
+
+// Management page route
+app.get('/management', (req, res) => {
+    res.render('management', {
+        title: 'Yönetim Kurulu'
+    });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);

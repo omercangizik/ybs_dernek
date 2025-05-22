@@ -1,9 +1,10 @@
 // Authentication middleware
 const isAuthenticated = (req, res, next) => {
-    if (req.session.user) {
+    if (req.session && req.session.user) {
+        req.user = req.session.user;
         return next();
     }
-    req.flash('error_msg', 'Bu sayfaya erişmek için giriş yapmalısınız.');
+    req.flash('error_msg', 'Bu işlem için giriş yapmanız gerekmektedir.');
     res.redirect('/login');
 };
 

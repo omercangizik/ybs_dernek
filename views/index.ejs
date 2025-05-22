@@ -1,29 +1,33 @@
 <%- include('partials/header') %>
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h1 class="display-4 mb-4">YBS Dernek'e Hoş Geldiniz</h1>
-                    <p class="lead">Yönetim Bilişim Sistemleri Derneği'nin resmi web sitesine hoş geldiniz.</p>
-                    <div class="mt-4">
-                        <% if (user) { %>
-                            <a href="/donate" class="btn btn-lg btn-primary">
-                                <i class="fas fa-heart"></i> Bağış Yap
-                            </a>
-                        <% } else { %>
-                            <a href="/login" class="btn btn-lg btn-primary">
-                                <i class="fas fa-heart"></i> Bağış Yapmak İçin Üye Olun
-                            </a>
-                        <% } %>
+<div class="hero-section" style="background-image: url('/images/backgrounds/arkaplan_a.jpg');">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card bg-transparent text-white border-0">
+                    <div class="card-body text-center">
+                        <h1 class="display-4 mb-4">YBS Dernek'e Hoş Geldiniz</h1>
+                        <p class="lead">Yönetim Bilişim Sistemleri Derneği'nin resmi web sitesine hoş geldiniz.</p>
+                        <div class="mt-4">
+                            <% if (user) { %>
+                                <a href="/donate" class="btn btn-lg btn-primary">
+                                    <i class="fas fa-heart"></i> Bağış Yap
+                                </a>
+                            <% } else { %>
+                                <a href="/login" class="btn btn-lg btn-primary">
+                                    <i class="fas fa-heart"></i> Bağış Yapmak İçin Üye Olun
+                                </a>
+                            <% } %>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row mt-4">
+<div class="container mt-5">
+    <div class="row">
         <div class="col-md-4">
             <div class="card h-100">
                 <div class="card-body text-center">

@@ -1,0 +1,114 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Blog Post Content -->
+        <div class="col-lg-8">
+            <article>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="mb-0"><%= post.title %></h1>
+                    <% if (typeof user !== 'undefined' && user && user.id === post.author_id) { %>
+                        <div class="btn-group">
+                            <a href="/blog/<%= post.id %>/edit" class="btn btn-outline-primary">
+                                <i class="fas fa-edit"></i> Düzenle
+                            </a>
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fas fa-trash"></i> Sil
+                            </button>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <div class="text-muted mb-4">
+                    <small>
+                        <i class="fas fa-user me-2"></i><%= post.author_name %>
+                        <i class="fas fa-calendar ms-3 me-2"></i><%= new Date(post.created_at).toLocaleDateString('tr-TR') %>
+                    </small>
+                </div>
+
+                <% if (post.image_url) { %>
+                    <img src="<%= post.image_url %>" class="img-fluid rounded mb-4" alt="<%= post.title %>">
+                <% } %>
+
+                <div class="blog-content mb-5">
+                    <%= post.content %>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title h4 mb-4">Yorumlar</h3>
+                        
+                        <% if (typeof comments !== 'undefined' && comments.length > 0) { %>
+                            <% comments.forEach(comment => { %>
+                                <div class="d-flex mb-4">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-user-circle fa-2x text-secondary"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h5 class="h6 mb-1"><%= comment.user_name %></h5>
+                                        <p class="small text-muted mb-2">
+                                            <%= new Date(comment.created_at).toLocaleDateString('tr-TR') %>
+                                        </p>
+                                        <p class="mb-0"><%= comment.content %></p>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <p class="text-muted">Henüz yorum yapılmamış.</p>
+                        <% } %>
+
+                        <% if (typeof user !== 'undefined' && user) { %>
+                            <form action="/blog/<%= post.id %>/comment" method="POST" class="mt-4">
+                                <div class="mb-3">
+                                    <label for="comment" class="form-label">Yorum Yap</label>
+                                    <textarea class="form-control" id="comment" name="content" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Yorum Gönder</button>
+                            </form>
+                        <% } else { %>
+                            <div class="alert alert-info mt-4">
+                                Yorum yapmak için <a href="/login">giriş yapın</a>.
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title h5">Yazar Hakkında</h3>
+                    <p class="card-text">
+                        <%= post.author_name %> tarafından yazılmıştır.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Blog Yazısını Sil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bu blog yazısını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <form action="/blog/<%= post.id %>/delete" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Sil</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %> 

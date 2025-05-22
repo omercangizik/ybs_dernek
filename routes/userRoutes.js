@@ -4,6 +4,8 @@ const multer = require('multer');
 const path = require('path');
 const { isAuthenticated } = require('../middleware/auth');
 const userController = require('../controllers/userController');
+const bcrypt = require('bcrypt');
+const db = require('../db');
 
 // Home page route
 router.get('/', (req, res) => {
@@ -44,7 +46,43 @@ const upload = multer({
 router.get('/register', userController.getRegister);
 router.post('/register', userController.postRegister);
 router.get('/login', userController.getLogin);
-router.post('/login', userController.postLogin);
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Get user from database
+        const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        
+        if (users.length === 0) {
+            req.flash('error_msg', 'E-posta adresi bulunamadı.');
+            return res.redirect('/login');
+        }
+
+        const user = users[0];
+
+        // Check password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            req.flash('error_msg', 'Geçersiz şifre.');
+            return res.redirect('/login');
+        }
+
+        // Set user session
+        req.session.user = {
+            id: user.id,
+            name: user.name,
+            surname: user.surname,
+            email: user.email
+        };
+
+        req.flash('success_msg', 'Başarıyla giriş yaptınız.');
+        res.redirect('/');
+    } catch (error) {
+        console.error(error);
+        req.flash('error_msg', 'Giriş yapılırken bir hata oluştu.');
+        res.redirect('/login');
+    }
+});
 router.get('/logout', userController.logout);
 
 // Profile routes
